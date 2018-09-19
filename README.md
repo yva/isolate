@@ -47,7 +47,7 @@ edit
 and run:
 ```
 cd ansible
-ansible-playbook main.yml -u root -b -K
+ansible-playbook main.yml -u root -b -K -e redis_pass=**********
 ```
 
 and restart server

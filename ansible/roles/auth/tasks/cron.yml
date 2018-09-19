@@ -2,7 +2,7 @@
 - cron:
     env: yes
     name: ISOLATE_REDIS_PASS
-    value: te2uth4dohLi8i
+    value: "{{redis_pass}}"
     user: auth
 
 - name: Installing autocomplete updater
