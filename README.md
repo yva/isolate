@@ -47,7 +47,7 @@ edit
 and run:
 ```
 cd ansible
-ansible-playbook main.yml
+ansible-playbook main.yml -u root -b -K
 ```
 
 and restart server
