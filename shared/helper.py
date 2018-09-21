@@ -406,7 +406,7 @@ class AuthHelper(object):
 
         self.USER = os.getenv('USER', 'USER_ENV_NOT_SET')
         self.SUDO_USER = os.getenv('SUDO_USER', 'SUDO_USER_ENV_NOT_SET')
-        self.ISOLATE_WRAPPER = os.getenv('ISOLATE_WRAPPER', 'sudo -u auth /mnt/data/auth/wrap/ssh.py')
+        self.ISOLATE_WRAPPER = os.getenv('ISOLATE_WRAPPER', 'sudo -u auth /opt/auth/wrappers/ssh.py')
 
         # User interface options
         # search print fields seporator
