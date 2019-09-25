@@ -190,7 +190,9 @@ class ServerConnection(object):
     session_exports = list()
     ISOLATE_SESSION = os.getenv('ISOLATE_SESSION', None)
     session_exports.append('ISOLATE_CALLBACK="{}";'.format(ISOLATE_SESSION))
-    ssh_wrapper_cmd = os.getenv('ISOLATE_WRAPPER', 'sudo -u auth /opt/auth/wrappers/ssh.py')
+
+    ssh_acess_group = os.getenv('ISOLATE_ACCESS_GROUP', 'default')
+    ssh_wrapper_cmd = os.getenv('ISOLATE_WRAPPER', 'sudo -u auth /opt/auth/wrappers/ssh.sh --access-group {0}'.format(ssh_acess_group))
 
     #
     def __init__(self, helper=None, unknown_args=None):

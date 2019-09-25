@@ -101,6 +101,7 @@ def verify_args(args):
     host['hostname'] = None
     host['port'] = None
     host['user'] = None
+    host['auth_key'] = None
     host['proxy_id'] = args.proxy_id
     host['proxy_host'] = None
     host['proxy_port'] = None
@@ -168,6 +169,15 @@ def verify_args(args):
             host['proxy_port'] = proxy_port
             LOGGER.debug('[proxy_port] override is set: ' + str(proxy_port))
 
+    if args.auth_key is not None:
+        auth_key = args.auth_key
+        if not os.path.isfile(auth_key) <= 0:
+            LOGGER.critical('[auth_key] Validation not passed. Not existed')
+            sys.exit(1)
+        else:
+            host['auth_key'] = auth_key
+            LOGGER.debug('[auth_key] override is set: ' + str(auth_key))
+
     return host
 
 
@@ -225,6 +235,7 @@ if __name__ == '__main__':
                                      description='ssh sudo wrapper')
     #
     parser.add_argument('hostname', type=str, help='server address (allowed FQDN,[a-z-],ip6,ip4)', nargs=1)
+    parser.add_argument('--auth-key', type=str, help='set private key', nargs=1)
     parser.add_argument('--user', type=str, help='set target username', nargs=1)
     parser.add_argument('--port', type=int, help='set target port')
     parser.add_argument('--nosudo', action='store_true', help='run connection without sudo terminating command')
@@ -264,6 +275,8 @@ if __name__ == '__main__':
         ssh_args.append('-l ' + str(host_meta['user']))
     if bool(host_meta['port']):
         ssh_args.append('-p ' + str(host_meta['port']))
+    if bool(host_meta['auth_key']):
+        ssh_args.append("-i '{0}'".format(str(host_meta['auth_key']) ))
     if bool(host_meta['hostname']):
         ssh_args.append(host_meta['hostname'])
     if host_meta['nosudo'] is False:  # if nosudo disabled <_<

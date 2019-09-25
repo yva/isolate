@@ -68,7 +68,10 @@ append to
 
 `/etc/sudoers` (or use `visudo`)
 ```
-%auth ALL=(auth) NOPASSWD: /opt/auth/wrappers/ssh.py
+%auth ALL=(auth) NOPASSWD: /opt/auth/wrappers/ssh.sh --access-group dev
+%prod ALL=(auth) NOPASSWD: /opt/auth/wrappers/ssh.sh --access-group prod
+%inf ALL=(auth) NOPASSWD: /opt/auth/wrappers/ssh.sh --access-group inf
+%support ALL=(auth) NOPASSWD: /opt/auth/wrappers/ssh.sh --access-group support
 ```
 
 ### SSH

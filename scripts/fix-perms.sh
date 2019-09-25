@@ -7,14 +7,17 @@ set -e;
 AUTH_DATA_ROOT="/opt/auth";
 cd "${AUTH_DATA_ROOT}";
 mkdir -p keys logs
+touch "${AUTH_DATA_ROOT}/keys/default.key"
 
 find "${AUTH_DATA_ROOT}" -type d -print0 | xargs -n60 -P 5 -0 chmod 0700
 find "${AUTH_DATA_ROOT}" -type f -print0 | xargs -n60 -P 5 -0 chmod 0600
 
 chmod 0750 "${AUTH_DATA_ROOT}";
 chmod 0700 "${AUTH_DATA_ROOT}/wrappers/ssh.py";
+chmod 0700 "${AUTH_DATA_ROOT}/wrappers/ssh.sh";
 
 chmod 0700 "${AUTH_DATA_ROOT}/configs"
+chmod 0600 "${AUTH_DATA_ROOT}/configs/settings.json";
 
 find "${AUTH_DATA_ROOT}/shared" -type d -print0 | xargs -n60 -P 5 -0 chmod 0750
 find "${AUTH_DATA_ROOT}/shared" -type f -print0 | xargs -n60 -P 5 -0 chmod 0640
