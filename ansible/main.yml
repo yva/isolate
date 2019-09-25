@@ -33,6 +33,6 @@
       tags: auth
 
     - role: deploy
-      git_repo: https://github.com/itsumma/isolate.git
+      git_repo: https://github.com/yva/isolate
       git_branch: master
       tags: deploy

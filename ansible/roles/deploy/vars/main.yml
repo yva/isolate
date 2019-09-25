@@ -1,2 +1,4 @@
 ---
 deploy_path: /opt/auth
+git_repo: https://github.com/itsumma/isolate.git
+git_branch: master
