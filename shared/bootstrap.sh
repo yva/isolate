@@ -2,6 +2,7 @@ umask 0077;
 USER="${USER:-NO_USER_ENV}";
 ISOLATE_DATA_ROOT="${ISOLATE_DATA_ROOT:-/opt/auth}";
 ISOLATE_SHARED="${ISOLATE_DATA_ROOT}/shared";
+ISOLATE_GROUPS="${ISOLATE_DATA_ROOT}/shared/groups";
 ISOLATE_HELPER="${ISOLATE_SHARED}/helper.py";
 ISOLATE_DEPLOY_LOCK="${ISOLATE_DATA_ROOT}/.deploy";
 ISOLATE_COLORS=true;
@@ -83,6 +84,10 @@ auth_callback () {
     fi
 }
 
+_set_access_group() {
+  source "$ISOLATE_GROUPS/$1.sh"
+}
+
 g () {
     if [[ $# -eq 0 ]] ; then
         echo -e "\\n  Usage: g <project|host> [server_name] [ --user | --port | --nosudo | --debug ] \\n";
@@ -101,6 +106,15 @@ s () {
         deploy_lock
         "${ISOLATE_HELPER}" search "${@}";
     fi
+}
+
+ag() {
+     if [[ $# -eq 0 ]] ; then
+        echo -e "\\n  Usage: ag <group> \\n";
+        return
+    elif [[ $# -gt 0 ]] ; then
+        _set_access_group "$1"
+    fi 
 }
 
 auth-add-user () {

@@ -6,7 +6,6 @@
 # fi
 
 source /opt/auth/shared/env.sh;
-source /opt/auth/shared/groups/default.sh;
 source /opt/auth/shared/bootstrap.sh;
 
 HISTTIMEFORMAT='[%F %T] '
@@ -16,6 +15,7 @@ shopt -s histappend # Append history instead of rewriting it
 shopt -s cmdhist # Use one command per line
 export PS1="[\\[\\033[38;5;75m\\]\\h\\[\\033[0m\\]][\\w]\\$ "
 
+_set_access_group 'default'
 
 _projects_bash()
 {
