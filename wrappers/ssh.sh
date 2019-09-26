@@ -34,4 +34,4 @@ if [ -z "$key_file" ]; then
 fi
 
 # call with auth file added
-"$DIR/ssh.py" '--auth-key' "$key_file" "${params[@]}"
+"$DIR/ssh.py" "${params[@]}" '--auth-key' "$key_file"
