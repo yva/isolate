@@ -11,3 +11,6 @@ __pycache__/
 **/.coverage
 .deploy
 add-support-user.sh
+*.log
+.vagrant
+*.retry

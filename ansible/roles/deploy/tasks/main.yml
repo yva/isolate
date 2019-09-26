@@ -4,14 +4,26 @@
 
 - name: Pulling changes on remote server...
   become: yes
-  become_user: auth
-  git: repo={{ git_repo }}
-    version={{ git_branch }}
-    dest={{ deploy_path }}
-    accept_hostkey=yes
-    force=no
-    recursive=yes
-    umask=077
+  copy:
+    dest: "{{ deploy_path }}/"
+    src: "{{playbook_dir}}/../{{item}}"
+    owner: auth
+    group: root
+  with_items:
+    - configs
+    - scripts
+    - wrappers
+    - requirements.txt
+
+- name: Pulling changes on remote server...
+  become: yes
+  copy:
+    dest: "{{ deploy_path }}/"
+    src: "{{playbook_dir}}/../{{item}}"
+    owner: auth
+    group: auth
+  with_items:
+    - shared
 
 - name: Set deploy flag...
   become: yes
@@ -29,15 +41,16 @@
   become: yes
   become_user: auth
 
-- name: Copying public key ...
-  shell: "cat /home/{{ auth_default_user }}/.ssh/id_rsa.pub"
-  register: pub_key
-
-- set_fact:
-    support_key: "{{ pub_key['stdout'] }}"
-#
-#- name: Copying add-support-user.sh template...
-#  template: src=add-support-user.sh dest=/opt/auth/add-support-user.sh mode=644 owner={{ auth_default_user }} group={{ auth_default_user }}
+- name:  Set env
+  lineinfile: 
+    dest: "{{ deploy_path }}/shared/env.sh"
+    regexp: "^ISOLATE_REDIS_PASS="
+    line: "ISOLATE_REDIS_PASS='{{redis_pass}}'"  
+  
+- name: Set bash.bashrc
+  lineinfile: 
+    dest: /etc/bash.bashrc
+    line: "[ ! -f /opt/auth/shared/bash.sh ] || . /opt/auth/shared/bash.sh"  
 
 - name: Unset deploy flag...
   become: yes

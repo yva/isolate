@@ -170,8 +170,8 @@ def verify_args(args):
             LOGGER.debug('[proxy_port] override is set: ' + str(proxy_port))
 
     if args.auth_key is not None:
-        auth_key = args.auth_key
-        if not os.path.isfile(auth_key) <= 0:
+        auth_key = args.auth_key[0]
+        if not os.path.isfile(auth_key):
             LOGGER.critical('[auth_key] Validation not passed. Not existed')
             sys.exit(1)
         else:

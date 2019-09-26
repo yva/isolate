@@ -5,7 +5,10 @@
 #     source /opt/auth/shared/bash.sh;
 # fi
 
+source /opt/auth/shared/env.sh;
+source /opt/auth/shared/groups/default.sh;
 source /opt/auth/shared/bootstrap.sh;
+
 HISTTIMEFORMAT='[%F %T] '
 HISTSIZE=10000
 HISTFILESIZE=10000

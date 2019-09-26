@@ -2,12 +2,13 @@
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 set -eu -o pipefail
 
-
 settings_file="/opt/auth/configs/settings.json"
 group=
+params=()
 while [[ $# -gt 0 ]]; do
   case "${1}" in
-    '--access-group') group=$1;; 
+    '--access-group') shift; group=$1;; 
+    *) params+=("$1")
   esac
   shift;
 done
@@ -22,7 +23,7 @@ if [ ! -e "$settings_file" ]; then
   exit 1
 fi
 
-if ! key_file="$(jq -cer '' "$settings_file")"; then 
+if ! key_file="$(jq -cer '.["'"$group"'"].auth_key' "$settings_file")"; then 
   echo "Error! Settings file $settings_file  parse failed for  >$group<!" >&2
   exit 1
 fi
@@ -33,4 +34,4 @@ if [ -z "$key_file" ]; then
 fi
 
 # call with auth file added
-"$DIR/ssh.py" '--auth-key' "$key_file" "$@"
+"$DIR/ssh.py" '--auth-key' "$key_file" "${params[@]}"

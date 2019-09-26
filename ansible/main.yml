@@ -2,6 +2,7 @@
 - name: Ubuntu 16.04 workarounds
   gather_facts: no
   hosts: all
+  become: true
   tasks:
   - name: Installing Python...
     apt:
@@ -17,7 +18,7 @@
 
 - name: Auth host setup...
   gather_facts: yes
-  become_user: root
+  become: true
   hosts: all
   roles:
     - role: common
@@ -33,6 +34,4 @@
       tags: auth
 
     - role: deploy
-      git_repo: https://github.com/yva/isolate
-      git_branch: master
       tags: deploy
