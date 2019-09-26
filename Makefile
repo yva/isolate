@@ -12,7 +12,7 @@ stop:
 
 rm: stop
 	@echo "###\n### Remove vm\n###"
-	vagrant destroy -y
+	vagrant destroy -f
 	
 shell:
 	@echo "###\n### Openning shell in container\n###"
