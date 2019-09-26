@@ -5,7 +5,7 @@ MKFILE_DIR:=$(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
 up:
 	vagrant up --provision
-
+	vagrant ssh
 stop:
 	@echo "###\n### Stopping vm\n###"
 	vagrant halt
