@@ -1,0 +1,36 @@
+{
+    "meta": {
+        "version": 0
+    },
+    "azure": {
+        "account": "yvasnapshts",
+        "container": "snapshots",
+        "path": "am",
+        "subscription": "Findo.BSPlus"
+    },
+    "settings": {
+      "meta": {
+          "what": "data snapshots",
+          "why": "we need data"
+      },
+      "file": "/settings/backup.json",
+      "modes": {
+        "saassh01": {
+          "mongodump": {
+            "mdb": {
+              "host": "10.0.2.5",
+              "port": "27018"
+            }
+          }
+        }
+      }
+    },
+    "deployments": {
+        "saas": {
+          "name": "public-v21-0",
+          "host": "mdbsh01", 
+          "modes": ["saassh01"]
+        }
+    }
+}
+

@@ -1,0 +1,131 @@
+{
+    "meta": {
+        "version": 0
+    },
+    "azure": {
+        "account": "yvadev",
+        "container": "tmp",
+        "path": "backups",
+        "subscription": "alexmak.bizspark"
+    },
+    "settings": {
+        "meta": {
+            "what": "data snapshots",
+            "why": "we need data"
+        },
+        "config": {
+            "meta": {
+                "version": 0
+            },
+            "consul": {
+                "consul.json": [
+                    "yva/dashboard/TimeZoneOffset"
+                ]
+            },
+            "mongoexport": {
+                "ud-Users": {
+                    "host": "mdb.service.consul",
+                    "port": "27017",
+                    "user": "${MDBDUMP_USER}",
+                    "pass": "${MDBDUMP_PASS}",
+                    "authdb": "admin",
+                    "db": "yva${MDBDUMP_RESETID}-ud",
+                    "collection": "Users"
+                },
+                "ud-Teams": {
+                    "host": "mdb.service.consul",
+                    "port": "27017",
+                    "user": "${MDBDUMP_USER}",
+                    "pass": "${MDBDUMP_PASS}",
+                    "authdb": "admin",
+                    "db": "yva${MDBDUMP_RESETID}-ud",
+                    "collection": "Teams"
+                },
+                "groups-Groups": {
+                    "host": "mdb.service.consul",
+                    "port": "27017",
+                    "user": "${MDBDUMP_USER}",
+                    "pass": "${MDBDUMP_PASS}",
+                    "authdb": "admin",
+                    "db": "yva${MDBDUMP_RESETID}-groups",
+                    "collection": "Groups"
+                },
+                "surveys-Answers": {
+                    "host": "mdb.service.consul",
+                    "port": "27017",
+                    "user": "${MDBDUMP_USER}",
+                    "pass": "${MDBDUMP_PASS}",
+                    "authdb": "admin",
+                    "db": "yva${MDBDUMP_RESETID}-surveys",
+                    "collection": "Answers"
+                },
+                "surveys-Questions": {
+                    "host": "mdb.service.consul",
+                    "port": "27017",
+                    "user": "${MDBDUMP_USER}",
+                    "pass": "${MDBDUMP_PASS}",
+                    "authdb": "admin",
+                    "db": "yva${MDBDUMP_RESETID}-",
+                    "collection": "Questions"
+                },
+                "surveys-Surveys": {
+                    "host": "mdb.service.consul",
+                    "port": "27017",
+                    "user": "${MDBDUMP_USER}",
+                    "pass": "${MDBDUMP_PASS}",
+                    "authdb": "admin",
+                    "db": "yva${MDBDUMP_RESETID}-surveys",
+                    "collection": "Surveys"
+                },
+                "analytics-Activities": {
+                    "host": "mdb.service.consul",
+                    "port": "27017",
+                    "user": "${MDBDUMP_USER}",
+                    "pass": "${MDBDUMP_PASS}",
+                    "authdb": "admin",
+                    "db": "yva${MDBDUMP_RESETID}-analytics",
+                    "collection": "Activities",
+                    "gzip": true
+                }
+            }
+        },
+        "modes": {
+            "mdbsecondary": {
+              "mongoexport": {
+                "analytics-Activities": {
+                  "host": "10.0.2.5",
+                  "port": "27018"
+                }
+              }
+            },
+            "team": {
+                "mongoexport": {
+                    "ud-Users": {
+                        "query": "{ \"TeamId\" : ObjectId(\"${TEAMID}\")}"
+                    },
+                    "ud-Teams": {
+                        "query": "{ \"_id\" : ObjectId(\"${TEAMID}\")}"
+                    },
+                    "groups-Groups": {
+                        "query": "{ \"TeamId\" : ObjectId(\"${TEAMID}\")}"
+                    },
+                    "surveys-Answers": {
+                        "query": "{ \"TeamId\" : ObjectId(\"${TEAMID}\")}"
+                    },
+                    "surveys-Surveys": {
+                        "query": "{ \"TeamId\" : ObjectId(\"${TEAMID}\")}"
+                    },
+                    "analytics-Activities": {
+                        "query": "{ \"TeamId\" : ObjectId(\"${TEAMID}\")}"
+                    }
+                }
+            }
+        }
+    },
+    "deployments": {
+        "backup-test": {
+          "name": "backup",
+	  "host": "mngr"
+        }
+    }
+}

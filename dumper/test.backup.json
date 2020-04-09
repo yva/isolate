@@ -1,0 +1,35 @@
+{
+    "meta": {
+        "version": 0
+    },
+    "azure": {
+        "account": "yvadev",
+        "container": "tmp",
+        "path": "backups",
+        "subscription": "alexmak.bizspark"
+    },
+    "settings": {
+      "meta": {
+          "what": "data snapshots",
+          "why": "we need data"
+      },
+      "file": "/settings/backup.json",
+      "modes": {
+        "saassh01": {
+          "mongodump": {
+            "mdb": {
+              "host": "10.0.2.5",
+              "port": "27018"
+            }
+          }
+        }
+      }
+    },
+    "deployments": {
+        "backup-test": {
+          "name": "backup",
+          "host": "mngr" 
+        }
+    }
+}
+
