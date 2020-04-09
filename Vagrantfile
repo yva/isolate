@@ -75,7 +75,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "ansible/main.yml"
-    ansible.raw_arguments = ["--extra-vars", "ubuntu_1604=true", '--extra-vars', 'redis_pass=test', '--tags', 'deploy', '-vv']
+    ansible.raw_arguments = ["--extra-vars", "ubuntu_1604=true", '--extra-vars', 'redis_pass=test', '-vv']
 
   end
 end

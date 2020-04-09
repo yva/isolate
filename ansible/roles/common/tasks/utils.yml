@@ -12,7 +12,7 @@
     DEBIAN_FRONTEND: noninteractive
     DEBIAN_PRIORITY: critical
     DEBCONF_NONINTERACTIVE_SEEN: true
-  apt: name={{ item }} state=present
+  apt: name={{ item }} state=latest
   with_items: "{{ common_utils_apt }}"
   when: ansible_os_family == "Debian"
 

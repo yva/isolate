@@ -1,0 +1,9 @@
+- copy:
+    src: "{{playbook_dir}}/../dumper/"
+    dest: "/opt/dumper/"
+    mode: 0644
+    owner: auth
+    group: auth
+- file: 
+    dest: /opt/dumper/dumper.sh
+    mode: 0750    

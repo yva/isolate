@@ -1,6 +1,11 @@
----
 - name: Ensure auth dir exist...
-  file: state=directory dest={{ deploy_path }} mode=0750 owner=auth group=auth
+  become: yes
+  file: 
+    state: directory
+    dest: "{{ deploy_path }}"
+    mode: 0750
+    owner: auth
+    group: auth
 
 - name: Pulling changes on remote server...
   become: yes

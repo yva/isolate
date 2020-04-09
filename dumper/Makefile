@@ -27,6 +27,5 @@ backup-test0: CONFIG=$(MKFILE_DIR)/test.backup.json
 backup-test0: TEAM=backup-test
 backup-test0: _run
 
-
 _run:
-	screen -dm bash --login -c "$(MKFILE_DIR)/dumper.sh --config $(CONFIG) -f $(TEAM) 2>&1 | tee -a $$HOME/dumper.log
+	screen -dm bash --login -c "$(MKFILE_DIR)/dumper.sh --config $(CONFIG) -f $(TEAM) 2>&1 | tee -a $$HOME/dumper.log"
