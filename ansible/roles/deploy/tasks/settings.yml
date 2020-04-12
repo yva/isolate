@@ -9,16 +9,9 @@
   file: 
     dest: "{{deploy_path}}/keys"
     mode: 0700
+    state: directory
     owner: auth
-    group: auth
-
-- name: create configs dir
-  become: yes
-  file: 
-    dest: "{{deploy_path}}/configs"
-    mode: 0755
-    owner: auth
-    group: auth
+    group: root
 
 - name: create keys
   become: yes
@@ -29,6 +22,15 @@
     owner: auth
     group: auth
   with_dict: "{{ygroups}}"
+
+- name: create configs dir
+  become: yes
+  file: 
+    dest: "{{deploy_path}}/configs"
+    state: directory
+    mode: 0755
+    owner: auth
+    group: auth
 
 - name: create settings
   become: yes
