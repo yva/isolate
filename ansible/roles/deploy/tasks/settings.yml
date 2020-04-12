@@ -16,7 +16,7 @@
 - name: touch keys
   become: yes
   file:
-    path: "{{deploy_path}}/keys/{{item.value.key}}"
+    path: "{{item.value.key}}"
     state: touch
     mode: 0600
     owner: auth
@@ -26,7 +26,7 @@
 - name: set keys
   become: yes
   copy:
-    dest: "{{deploy_path}}/keys/{{item.value.key}}"
+    dest: "{{item.value.key}}"
     mode: 0600
     owner: auth
     group: auth
@@ -51,6 +51,15 @@
     mode: 0644
     owner: auth
     group: auth
+
+- name: ssh settngs
+  become: yes
+  copy:
+    src: defaults.conf
+    dest: "{{deploy_path}}/configs/defaults.conf"
+    mode: 0644
+    owner: auth
+    group: auth    
 
 - name: Allow specified groups to sudo
   template: 

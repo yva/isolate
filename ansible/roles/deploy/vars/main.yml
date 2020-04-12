@@ -3,25 +3,25 @@ deploy_path: /opt/auth
 ygroups:
   default:
     group: auth
-    key: default.key
+    key: "{{deploy_path}}/keys/default.key"
     keyenv: DEV_SSH_PRIVATE_KEY
     kv:
       ISOLATE_REDIS_DB: 0
   prod:
     group: prod
-    key: prod.key
+    key: "{{deploy_path}}/keys/prod.key"
     keyenv: SAAS_SSH_PRIVATE_KEY
     kv:
       ISOLATE_REDIS_DB: 1
   support:
     group: support
-    key: support.key
+    key: "{{deploy_path}}/keys/support.key"
     keyenv: SUPPORT_SSH_PRIVATE_KEY
     kv:
       ISOLATE_REDIS_DB: 2
   inf:
     group: inf
-    key: inf.key
+    key: "{{deploy_path}}/keys/inf.key"
     keyenv: INF_SSH_PRIVATE_KEY
     kv: 
       ISOLATE_REDIS_DB: 3

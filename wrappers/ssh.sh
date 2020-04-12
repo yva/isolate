@@ -28,7 +28,7 @@ if [ ! -e "$settings_file" ]; then
   exit 1
 fi
 
-if ! key_file="$(jq -cer '.["'"$group"'"].auth_key' "$settings_file")"; then 
+if ! key_file="$(jq -cer '.["'"$group"'"].key' "$settings_file")"; then 
   echo "Error! Settings file $settings_file  parse failed for  >$group<!" >&2
   exit 1
 fi
