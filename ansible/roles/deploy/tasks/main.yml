@@ -62,6 +62,19 @@
 
 - include: settings.yml
 
+- name: copy helpers
+  become: yes
+  copy:
+    src: "{{item}}"
+    dest: "/usr/local/bin/{{item}}"
+    mode: 0750
+    owner: auth
+    group: auth
+  with_items:
+    - add.depl.sh
+    - del.depl.sh
+    - hosts.by.consul.sh
+
 - name:  Set env
   lineinfile: 
     dest: "{{ deploy_path }}/shared/env.sh"
