@@ -84,7 +84,7 @@
 - name: Set bash.bashrc
   lineinfile: 
     dest: /etc/bash.bashrc
-    line: "[ ! -f /opt/auth/shared/bash.sh ] || . /opt/auth/shared/bash.sh"  
+    line: "[ ! -f /opt/auth/shared/bash.sh ] || { . /opt/auth/shared/bash.sh; ag; }"
 
 - name: Unset deploy flag...
   become: yes

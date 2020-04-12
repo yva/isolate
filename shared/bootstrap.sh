@@ -155,7 +155,8 @@ s () {
 
 ag() {
      if [[ $# -eq 0 ]] ; then
-        echo -e "\\n  Usage: ag <group> \\n";
+        echo -e "\\n  Usage: ag <group>\\n Switch 2 default \\n";
+        _set_access_group
         return
     elif [[ $# -gt 0 ]] ; then
         _set_access_group "$1"

@@ -14,8 +14,6 @@ HISTFILESIZE=10000
 shopt -s histappend # Append history instead of rewriting it
 shopt -s cmdhist # Use one command per line
 
-_set_access_group 'default'
-
 _projects_bash()
 {
     # Only projects completition for S
@@ -34,7 +32,6 @@ _projects_bash()
 }
 
 complete -F _projects_bash s
-
 
 _project_host_bash()
 {
