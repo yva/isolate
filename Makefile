@@ -3,13 +3,18 @@ IMAGE:=$(NAME):latest
 MKFILE_DIR:=$(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
 .PHONY: dumper
+.ONESHELL:
+SHELL = bash
 
 up:
+	. env.load.sh --from $(MKFILE_DIR)/yva.env.json --section inf
 	vagrant up --provision
 	vagrant ssh
 
-deploy: 
-	export ANSTAGS='deploy'; vagrant up --provision && vagrant ssh
+deploy:
+	. env.load.sh --from $(MKFILE_DIR)/yva.env.json --section inf
+	export ANSTAGS='deploy'
+	vagrant up --provision && vagrant ssh
 
 stop:
 	@echo "###\n### Stopping vm\n###"
@@ -26,7 +31,7 @@ shell:
 test: 
 	cd ansible; ansible-playbook main.yml -t test -vv
 
-dumper: 
+dumper:
 	cd ansible; ansible-playbook main.yml --tags dumper -vv
 
 clean: stop rm

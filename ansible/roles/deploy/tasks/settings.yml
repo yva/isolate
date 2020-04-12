@@ -13,7 +13,7 @@
     owner: auth
     group: root
 
-- name: create keys
+- name: touch keys
   become: yes
   file:
     path: "{{deploy_path}}/keys/{{item.value.key}}"
@@ -22,6 +22,17 @@
     owner: auth
     group: auth
   with_dict: "{{ygroups}}"
+
+- name: set keys
+  become: yes
+  copy:
+    dest: "{{deploy_path}}/keys/{{item.value.key}}"
+    mode: 0600
+    owner: auth
+    group: auth
+    content: "{{ lookup('env',item.value.keyenv) }}"
+  with_dict: "{{ygroups}}"
+  when: lookup('env',item.value.keyenv) | length > 0 
 
 - name: create configs dir
   become: yes

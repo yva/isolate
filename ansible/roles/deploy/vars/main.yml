@@ -4,20 +4,24 @@ ygroups:
   default:
     group: auth
     key: default.key
+    keyenv: DEV_SSH_PRIVATE_KEY
     kv:
       ISOLATE_REDIS_DB: 0
   prod:
     group: prod
     key: prod.key
+    keyenv: SAAS_SSH_PRIVATE_KEY
     kv:
       ISOLATE_REDIS_DB: 1
   support:
     group: support
     key: support.key
+    keyenv: SUPPORT_SSH_PRIVATE_KEY
     kv:
       ISOLATE_REDIS_DB: 2
   inf:
     group: inf
     key: inf.key
+    keyenv: INF_SSH_PRIVATE_KEY
     kv: 
       ISOLATE_REDIS_DB: 3
