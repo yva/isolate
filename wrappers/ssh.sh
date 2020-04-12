@@ -7,7 +7,12 @@ group=
 params=()
 while [[ $# -gt 0 ]]; do
   case "${1}" in
-    '--access-group') shift; group="$1";; 
+    '--access-group') shift;
+    # only first mention of --access-group works
+    if [ -z "$group" ]; then 
+      group="$1"
+    fi
+    ;; 
     *) params+=("$1")
   esac
   shift;
