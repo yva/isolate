@@ -127,6 +127,7 @@ _set_access_group() {
   if kv="$( jq -cer '.["'"${group}"'"].kv' "$ISOLATE_GROUP_CONFIG")"; then
     apply_env_kv "$kv"
     export ISOLATE_ACCESS_GROUP="$1"
+    export PS1="[\\[\\033[35;5;75m\\]${group}\\[\\033[0m\\]][\\[\\033[38;5;75m\\]\\h\\[\\033[0m\\]][\\w]\\$ "
   else
     echo "Error load env $1, group info not found!" >&2 
   fi
