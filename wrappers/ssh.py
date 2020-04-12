@@ -277,6 +277,7 @@ if __name__ == '__main__':
         ssh_args.append('-p ' + str(host_meta['port']))
     if bool(host_meta['auth_key']):
         ssh_args.append("-i '{0}'".format(str(host_meta['auth_key']) ))
+        ssh_proxy_args.append(ssh_args[-1])
     if bool(host_meta['hostname']):
         ssh_args.append(host_meta['hostname'])
     if host_meta['nosudo'] is False:  # if nosudo disabled <_<
