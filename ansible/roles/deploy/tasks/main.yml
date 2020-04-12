@@ -15,8 +15,6 @@
     owner: auth
     group: root
   with_items:
-    - configs
-    - scripts
     - wrappers
     - requirements.txt
 
@@ -30,6 +28,27 @@
   with_items:
     - shared
 
+- name: Pulling changes on remote server...
+  become: yes
+  command: find "{{ deploy_path }}/wrappers" -type f -exec chmod 0700 {} \;
+
+- name: Pulling changes on remote server...
+  become: yes
+  command: find "{{ deploy_path }}/shared" -type d -exec chmod 0750 {} \;
+
+- name: Pulling changes on remote server...
+  become: yes
+  command: find "{{ deploy_path }}/shared" -type f -exec chmod 0640 {} \;
+
+- name: Pulling changes on remote server...
+  file:
+    path: "{{ deploy_path }}/shared/{{item}}"
+    state: touch
+    mode: 0750
+  with_items:
+    - helper.py
+    - auth-manager.py
+
 - name: Set deploy flag...
   become: yes
   become_user: auth
@@ -41,10 +60,7 @@
 - name: Installing pip requirements.txt...
   pip: requirements="{{ deploy_path }}/requirements.txt" umask=0022
 
-- name: Executing deploy script...
-  shell: "bash --norc {{ deploy_path }}/scripts/fix-perms.sh"
-  become: yes
-  become_user: auth
+- include: settings.yml
 
 - name:  Set env
   lineinfile: 

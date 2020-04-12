@@ -1,0 +1,3 @@
+{% for key,value in ygroups.items() %}
+%{{ value.group }} ALL=(auth) NOPASSWD: /opt/auth/wrappers/ssh.sh --access-group {{key}}
+{% endfor %}

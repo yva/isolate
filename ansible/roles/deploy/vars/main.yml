@@ -1,4 +1,23 @@
 ---
 deploy_path: /opt/auth
-git_repo: https://github.com/itsumma/isolate.git
-git_branch: master
+ygroups:
+  default:
+    group: auth
+    key: default.key
+    kv:
+      ISOLATE_REDIS_DB: 0
+  prod:
+    group: prod
+    key: prod.key
+    kv:
+      ISOLATE_REDIS_DB: 1
+  support:
+    group: support
+    key: support.key
+    kv:
+      ISOLATE_REDIS_DB: 2
+  inf:
+    group: inf
+    key: inf.key
+    kv: 
+      ISOLATE_REDIS_DB: 3

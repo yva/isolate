@@ -1,0 +1,47 @@
+- name: create groups
+  become: yes
+  group:
+    name: "{{item.value.group}}"
+  with_dict: "{{ygroups}}"    
+
+- name: create keys dir
+  become: yes
+  file: 
+    dest: "{{deploy_path}}/keys"
+    mode: 0700
+    owner: auth
+    group: auth
+
+- name: create configs dir
+  become: yes
+  file: 
+    dest: "{{deploy_path}}/configs"
+    mode: 0755
+    owner: auth
+    group: auth
+
+- name: create keys
+  become: yes
+  file:
+    path: "{{deploy_path}}/keys/{{item.value.key}}"
+    state: touch
+    mode: 0600
+    owner: auth
+    group: auth
+  with_dict: "{{ygroups}}"
+
+- name: create settings
+  become: yes
+  copy: 
+    content: "{{ygroups|to_json}}"
+    dest: "{{deploy_path}}/configs/settings.json"
+    mode: 0644
+    owner: auth
+    group: auth
+
+- name: Allow specified groups to sudo
+  template: 
+    src: sudoers.j2
+    dest: /etc/sudoers.d/sudoers
+    validate: 'visudo -cf %s'
+    mode: 0440    

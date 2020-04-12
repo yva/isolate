@@ -2,7 +2,7 @@ umask 0077;
 USER="${USER:-NO_USER_ENV}";
 ISOLATE_DATA_ROOT="${ISOLATE_DATA_ROOT:-/opt/auth}";
 ISOLATE_SHARED="${ISOLATE_DATA_ROOT}/shared";
-ISOLATE_GROUPS="${ISOLATE_DATA_ROOT}/shared/groups";
+ISOLATE_GROUP_CONFIG="${ISOLATE_DATA_ROOT}/configs/settings.json"
 ISOLATE_HELPER="${ISOLATE_SHARED}/helper.py";
 ISOLATE_DEPLOY_LOCK="${ISOLATE_DATA_ROOT}/.deploy";
 ISOLATE_COLORS=true;
@@ -29,6 +29,40 @@ export LC_ALL="en_US.UTF-8";
 
 PYTHONDONTWRITEBYTECODE=1;
 export PYTHONDONTWRITEBYTECODE;
+
+# envsust but dont subst undefined
+function envsubst_butundef() {
+  local ENVLIST
+  # get all env which set 
+  ENVLIST="$(compgen -e | sed -e 's/^/${/g' -e 's/$/}/' | tr '\n' ' ')"
+  # subst 2 value 
+  envsubst "$ENVLIST"
+}
+
+## apply kv from json with env subst
+function apply_env_kv() {
+  #input { key: value }
+  local kv="${1}"
+  local base64decode
+  local keys
+
+  [ "${2:-}" != '--decode' ] || base64decode=1
+
+  # get list of installed applications and reverse it
+  IFS=' ' read -a keys <<< "$(echo "$kv" | jq -cer '.|keys_unsorted[]' | tr '\n' ' ')"
+ 
+  for key in "${keys[@]}"; do
+    local rawvalue
+    local value
+    rawvalue="$(echo "$kv" | jq -cer '.["'"$key"'"]')"
+    [ -z "${base64decode:-}" ] || rawvalue="$(echo "$rawvalue" | base64 -d)"
+    value="$(echo  "$rawvalue" | envsubst_butundef)"
+    set -a
+    # if some variables not subst at value - we dont set it. leave in string
+    eval "$key='${value}'"
+    set +a
+  done
+}
 
 gen-oath-safe () {
     bash --norc "${ISOLATE_DATA_ROOT}/shared/gen-oath-safe.sh" "${@}";
@@ -84,8 +118,18 @@ auth_callback () {
     fi
 }
 
+# set env 4 isolte group
+# we set 
 _set_access_group() {
-  source "$ISOLATE_GROUPS/$1.sh"
+
+  local kv
+  local group="${1:-default}"
+  if kv="$( jq -cer '.["'"${group}"'"].kv' "$ISOLATE_GROUP_CONFIG")"; then
+    apply_env_kv "$kv"
+    export ISOLATE_ACCESS_GROUP="$1"
+  else
+    echo "Error load env $1, group info not found!" >&2 
+  fi
 }
 
 g () {

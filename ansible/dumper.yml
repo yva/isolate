@@ -6,4 +6,4 @@
     group: auth
 - file: 
     dest: /opt/dumper/dumper.sh
-    mode: 0750    
+    mode: 0750
