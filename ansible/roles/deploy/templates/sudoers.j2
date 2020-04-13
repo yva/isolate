@@ -1,3 +1,5 @@
 {% for key,value in ygroups.items() %}
-%{{ value.group }} ALL=(auth) NOPASSWD: /opt/auth/wrappers/ssh.sh --access-group {{key}}
+Defaults:%{{ value.group }} env_keep += "FINDO_* YVA_*"
+Cmnd_Alias AUTH_CMD_{{ value.group|upper }}=/opt/auth/wrappers/ssh.sh --access-group {{key}} *
+%{{ value.group }} ALL=(auth) NOPASSWD: AUTH_CMD_{{ value.group|upper }}
 {% endfor %}

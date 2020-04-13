@@ -191,8 +191,8 @@ class ServerConnection(object):
     ISOLATE_SESSION = os.getenv('ISOLATE_SESSION', None)
     session_exports.append('ISOLATE_CALLBACK="{}";'.format(ISOLATE_SESSION))
 
-    ssh_acess_group = os.getenv('ISOLATE_ACCESS_GROUP', 'default')
-    ssh_wrapper_cmd = os.getenv('ISOLATE_WRAPPER', 'sudo -u auth /opt/auth/wrappers/ssh.sh --access-group {0}'.format(ssh_acess_group))
+    ssh_access_group = os.getenv('ISOLATE_ACCESS_GROUP', 'default')
+    ssh_wrapper_cmd = 'sudo -u auth /opt/auth/wrappers/ssh.sh --access-group {0}'.format(ssh_access_group)
 
     #
     def __init__(self, helper=None, unknown_args=None):
@@ -408,7 +408,8 @@ class AuthHelper(object):
 
         self.USER = os.getenv('USER', 'USER_ENV_NOT_SET')
         self.SUDO_USER = os.getenv('SUDO_USER', 'SUDO_USER_ENV_NOT_SET')
-        self.ISOLATE_WRAPPER = os.getenv('ISOLATE_WRAPPER', 'sudo -u auth /opt/auth/wrappers/ssh.py')
+        ssh_access_group = os.getenv('ISOLATE_ACCESS_GROUP', 'default')
+        self.ISOLATE_WRAPPER = 'sudo -u auth /opt/auth/wrappers/ssh.sh --access-group {0}'.format(ssh_access_group)
 
         # User interface options
         # search print fields seporator
