@@ -29,49 +29,47 @@ Once they want to connect to the endpoint server, the system executes ssh comman
 
 ## Requirements
 
-* Fresh CentOS 7 / Ubuntu 16.04 / Debian 9 setup
+* Fresh CentOS 7 / Ubuntu 16.04 / Ubuntu 18.04 / Debian 9 setup
 * [Ansible](http://docs.ansible.com/ansible/intro_installation.html) 2.3+ for
 install or update
 
 ## INSTALL
 
-for ubuntu only:
-```
-# apt update; apt install python python-pip python-dev -y
-```
-
-edit
+for ubuntu:
+setup host and user at:
 
 `ansible/hosts.ini`
 
 and run:
-```
-cd ansible
-ansible-playbook main.yml -u root -b -K -e redis_pass=**********
+
+```bash
+#install all from scratch
+make auth-all
+
+# deploy only auth deployment (or update auth settings, groups fexample)
+make auth-deploy
+
 ```
 
-and restart server
-```
-# reboot
-```
+it's possible to restart server after install
 
-append to
+### Test install
+Creates Ubuntu 18.04 vagrant host with auth installed
+## Warning !!!
+Test host will contain PRODUCTION keys ( if you have access to azure keyvaut), so dont forget to destroy test VM!!!
 
-`/etc/bashrc` (`/etc/bash.bashrc` on debian/ubuntu):
-```
-if [ -f /opt/auth/shared/bash.sh ]; then
-    source /opt/auth/shared/bash.sh;
-fi
-```
+```bash
+# create Ubuntu 18.04 vagrant host with auth
+make up
 
-append to
+# test only auth deployment (or update auth settings, groups fexample)
+make deploy
 
-`/etc/sudoers` (or use `visudo`)
-```
-%auth ALL=(auth) NOPASSWD: /opt/auth/wrappers/ssh.sh --access-group dev
-%prod ALL=(auth) NOPASSWD: /opt/auth/wrappers/ssh.sh --access-group prod
-%inf ALL=(auth) NOPASSWD: /opt/auth/wrappers/ssh.sh --access-group inf
-%support ALL=(auth) NOPASSWD: /opt/auth/wrappers/ssh.sh --access-group support
+#remove all
+make clean
+
+#test conneciton to remote auth host
+make auth-test
 ```
 
 ### SSH
@@ -189,47 +187,37 @@ Host auth
 
 Persistent connection - for easy connection reopen without OTP and password prompt. (3h hours inactive timeout)
 
-### Data sources
+### Access and groups
 
-append to
+  * Для разделения доступа к разным разверткам, в ISOLATE все хосты разделены на группы
+    * default (dev & test развертывания, доступ юда автоматически выдается если пользователь добален через `auth-add-user`), unix группа **auth**
+    * prod ( saas & mts saas ), unix группа **prod**
+    * inf ( infrastructure hosts ), unix группа **inf**
+    * suppport ( развертки клиентов ), unix группа **support**
+  * Каждая группа использует свою пару  приватный/публичный ключ, и каждая группа это отедльная Redis база
+  * Для активации группы пользователь должен вызвать функцию `ag [group]`в shell, если группу не указать выберется default. После перехода меняются хосты доступные функциям `g` && `s` (переключение между группами доступно любому пользователю), но 
+  * Для выдачи пользователю прав на ssh к машинам в группе хостов, администратор должен добавить пользователя в соотвествующую unix-группу.
+  * Добавить юзера в группу `sudo usermod -a -G username prod`
+  * Состав и приватные ключи групп регулируются тут: ansible/roles/deploy/vars/main.yml
 
-`/etc/bashrc` (`/etc/bash.bashrc` for debian/ubuntu):
-```
-ISOLATE_BACKEND=redis; # or zabbix
-export ISOLATE_BACKEND;
-```
+### Hosts & yva deployments operations
 
-#### Redis
+#### add yva deployment 
+it works if deployment is up and consul inside running propertly
 
-```
-ISOLATE_REDIS_HOST="127.0.0.1";
-ISOLATE_REDIS_PORT="6379";
-ISOLATE_REDIS_DB=0;
-ISOLATE_REDIS_PASS="te2uth4dohLi8i"; # ansible/roles/redis/vars/main.yml
-export ISOLATE_REDIS_HOST;
-export ISOLATE_REDIS_PORT;
-export ISOLATE_REDIS_PASS;
-export ISOLATE_REDIS_DB;
-```
-
-#### Zabbix
-
-```
-ISOLATE_ZABBIX_URL="http://zabbix.srv"
-ISOLATE_ZABBIX_USER="isolate"
-ISOLATE_ZABBIX_PASS="zabbixpass"
-export ISOLATE_ZABBIX_URL;
-export ISOLATE_ZABBIX_USER;
-export ISOLATE_ZABBIX_PASS;
+```bash
+add.depl.sh name url
+ - or - 
+add.depl.sh name ip
 ```
 
+#### delete yva deployments
 
-Load changes
-```
-source /etc/bashrc
+```bash
+del.depl.sh name
 ```
 
-#### add server
+#### manual add server
 
 Login as new auth user before.
 
@@ -238,24 +226,7 @@ $ auth-add-host --project starwars --server-name sel-msk-prod --ip 1.1.1.1
 Database updated
 ```
 
-add `support` user on server via auto-generated helper:
-```
-$ add-support-user-helper
-
-SUPPORT_USER="support"
-KEY="<YOU KEY HERE>"
-
-useradd -m ${SUPPORT_USER}
-mkdir /home/${SUPPORT_USER}/.ssh
-echo ${KEY} >> /home/${SUPPORT_USER}/.ssh/authorized_keys
-chmod 600 /home/${SUPPORT_USER}/.ssh/authorized_keys
-chmod 700 /home/${SUPPORT_USER}/.ssh/
-chown -R ${SUPPORT_USER}:${SUPPORT_USER} /home/${SUPPORT_USER}/.ssh/
-echo "${SUPPORT_USER} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-```
-
-
-#### del server
+#### manual del server
 ```
 $ auth-del-host <server_id>
 ```
