@@ -59,11 +59,26 @@
     dest: "{{deploy_path}}/configs/defaults.conf"
     mode: 0644
     owner: auth
-    group: auth    
+    group: auth
 
 - name: Allow specified groups to sudo
+  become: yes
   template: 
     src: sudoers.j2
     dest: /etc/sudoers.d/sudoers
     validate: 'visudo -cf %s'
-    mode: 0440    
+    owner: root
+    group: root
+    mode: 0440
+
+- name: remove previous from sudoers
+  become: yes
+  lineinfile: 
+    path: /etc/sudoers
+    regexp: "{{item}}"
+    state: absent
+    validate: 'visudo -cf %s'
+    mode: 0440
+  with_items: 
+    - '^%auth '
+    - 'Defaults:%auth '
