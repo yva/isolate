@@ -28,8 +28,15 @@ shell:
 	@echo "###\n### Openning shell in container\n###"
 	vagrant ssh
 
-test: 
+auth-test: 
 	cd ansible; ansible-playbook main.yml -t test -vv
+
+auth-deploy:
+	. env.load.sh --from $(MKFILE_DIR)/yva.env.json --section inf
+	cd ansible; ansible-playbook main.yml -t deploy -vv -e redis_pass=$$INF_AUTH_ISOLATE_REDIS_PASS
+auth-all:
+	. env.load.sh --from $(MKFILE_DIR)/yva.env.json --section inf
+	cd ansible; ansible-playbook main.yml -vv -e redis_pass=$$INF_AUTH_ISOLATE_REDIS_PASS
 
 dumper:
 	cd ansible; ansible-playbook main.yml --tags dumper -vv
