@@ -37,8 +37,7 @@ auth-deploy:
 auth-all:
 	. env.load.sh --from $(MKFILE_DIR)/yva.env.json --section inf
 	cd ansible; ansible-playbook main.yml -vv -e redis_pass=$$INF_AUTH_ISOLATE_REDIS_PASS
-
-dumper:
+auth-dumper:
 	cd ansible; ansible-playbook main.yml --tags dumper -vv
 
 clean: stop rm
