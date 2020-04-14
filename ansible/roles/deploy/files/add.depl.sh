@@ -8,6 +8,8 @@ proxy="$2"
 usr="${3:-yva}"
 
 if ! echo "$proxy" | grep '^[.0-9]*$' >/dev/null; then
+  proxy="${proxy#http*://}"
+  proxy="${proxy%%/*}"
   proxy="$(dig $proxy +short | grep '^[.0-9]*$' | head -n1)"
 fi
 

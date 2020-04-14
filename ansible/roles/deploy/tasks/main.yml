@@ -74,6 +74,7 @@
     - add.depl.sh
     - del.depl.sh
     - hosts.by.consul.sh
+  tags: helpers
 
 - name:  Set env
   lineinfile: 
