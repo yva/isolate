@@ -226,3 +226,9 @@ auth-dump-project-config () {
         "${ISOLATE_DATA_ROOT}/shared/auth-manager.py" "dump-project-config" --project "${@}";
     fi
 }
+
+function auth-help() {
+  local DIR
+  DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+  consolemd "$DIR/help.md"
+}

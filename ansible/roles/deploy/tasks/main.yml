@@ -87,6 +87,15 @@
     dest: /etc/bash.bashrc
     line: "[ ! -f /opt/auth/shared/bash.sh ] || { . /opt/auth/shared/bash.sh; ag; }"
 
+- name: motd
+  become: yes
+  copy:
+    src: 99-auth-helper
+    dest: /etc/update-motd.d/99-auth-helper
+    owner: root
+    group: root
+    mode: 0751
+
 - name: Unset deploy flag...
   become: yes
   become_user: auth

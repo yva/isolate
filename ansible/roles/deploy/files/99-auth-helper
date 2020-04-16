@@ -1,0 +1,5 @@
+#!/bin/bash
+
+source /opt/auth/shared/bash.sh
+
+auth-help
