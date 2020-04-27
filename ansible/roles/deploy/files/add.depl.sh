@@ -8,8 +8,13 @@ proxy="$2"
 usr="${3:-yva}"
 
 if ! echo "$proxy" | grep '^[.0-9]*$' >/dev/null; then
+  # remove protocol prefix
   proxy="${proxy#http*://}"
+  # remove path
   proxy="${proxy%%/*}"
+  # remove port
+  proxy="${proxy%%:*}"
+  # make DNS request
   proxy="$(dig $proxy +short | grep '^[.0-9]*$' | head -n1)"
 fi
 
